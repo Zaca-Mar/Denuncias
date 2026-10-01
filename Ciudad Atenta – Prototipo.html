@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ciudad Atenta – Prototipo</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F5F6F2;--card:#fff;--ink:#17211E;--mut:#5B6862;--brand:#0F3D33;--onbrand:#fff;--sig:#F2B705;--line:#D5DAD3;--red:#B3261E;--ok:#2E7D32;--warn:#9A6B00;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0E1512;--card:#17211D;--ink:#EAF0EC;--mut:#9BA9A2;--brand:#F2B705;--onbrand:#10201A;--line:#2B3934;--red:#FF8A80;--ok:#7BD07F;--warn:#F2B705}}
+:root[data-theme="dark"]{--bg:#0E1512;--card:#17211D;--ink:#EAF0EC;--mut:#9BA9A2;--brand:#F2B705;--onbrand:#10201A;--line:#2B3934;--red:#FF8A80;--ok:#7BD07F;--warn:#F2B705}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.5 "Public Sans",system-ui,sans-serif}
+h1,h2,h3{font-family:"Bricolage Grotesque","Public Sans",sans-serif;line-height:1.1;margin:0 0 .5em}
+h1{font-size:clamp(2rem,6vw,3.2rem);font-weight:800}h2{font-size:1.6rem}h3{font-size:1.1rem}
+header{background:var(--brand);color:var(--onbrand);position:sticky;top:0;z-index:5}
+.bar{max-width:1000px;margin:0 auto;padding:12px 16px;display:flex;flex-wrap:wrap;gap:8px 20px;align-items:center}
+.logo{font:800 1.25rem "Bricolage Grotesque",sans-serif;display:flex;gap:8px;align-items:center}
+.logo i{width:14px;height:14px;background:var(--sig);border-radius:50%;box-shadow:0 0 0 4px rgba(242,183,5,.3)}
+nav{display:flex;gap:4px;flex-wrap:wrap;flex:1}
+nav button,.who{background:none;border:0;color:inherit;font:500 .95rem inherit;font-family:inherit;padding:8px 12px;border-radius:8px;cursor:pointer}
+nav button[aria-current=true]{background:rgba(255,255,255,.18);font-weight:600}
+:root:not([data-theme="light"]) nav button[aria-current=true]{background:rgba(0,0,0,.15)}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid var(--sig);outline-offset:2px}
+main{max-width:1000px;margin:0 auto;padding:24px 16px 64px}
+.hero{padding:24px 0 8px}.hero p{max-width:56ch;color:var(--mut);font-size:1.1rem}
+.grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));margin-top:24px}
+.tile{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;text-align:left;cursor:pointer;font:inherit;color:inherit}
+.tile.anon{background:var(--brand);color:var(--onbrand);border-color:var(--brand)}
+.tile p{margin:0;opacity:.85}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;margin-bottom:16px}
+label{display:block;font-weight:600;margin:14px 0 4px}
+input,select,textarea{width:100%;font:inherit;color:inherit;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px}
+textarea{min-height:110px;resize:vertical}
+.btn{background:var(--brand);color:var(--onbrand);border:0;border-radius:10px;padding:12px 20px;font:600 1rem inherit;font-family:inherit;cursor:pointer;margin-top:18px}
+.btn.alt{background:none;color:var(--ink);border:1px solid var(--line)}
+.note{font-size:.9rem;color:var(--mut);margin:6px 0 0}
+.shield{border-left:5px solid var(--sig);padding:10px 14px;background:var(--card);border-radius:0 10px 10px 0;margin:12px 0}
+.code{font:800 2rem "Bricolage Grotesque",sans-serif;letter-spacing:.06em;background:var(--bg);border:2px dashed var(--brand);border-radius:10px;padding:10px 16px;display:inline-block;margin:8px 0}
+.badge{display:inline-block;font-size:.8rem;font-weight:600;padding:2px 10px;border-radius:99px;border:1px solid currentColor}
+.s-Recibido{color:var(--mut)}.s-En-revisión{color:var(--warn)}.s-En-curso{color:var(--warn)}.s-Resuelto{color:var(--ok)}.s-Rechazado{color:var(--red)}
+.row{display:flex;flex-wrap:wrap;gap:8px 16px;justify-content:space-between;align-items:baseline}
+.steps{display:flex;gap:6px;margin:12px 0 0}.steps span{flex:1;height:6px;border-radius:3px;background:var(--line)}.steps span.on{background:var(--ok)}
+.tblwrap{overflow-x:auto}table{width:100%;border-collapse:collapse;min-width:640px}
+th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--line);font-size:.92rem}
+.filters{display:flex;gap:10px;flex-wrap:wrap}.filters select{width:auto}
+.stats{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:16px}.stats div{flex:1;min-width:110px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px}
+.stats b{font:800 1.8rem "Bricolage Grotesque",sans-serif;display:block}
+.err{color:var(--red);font-weight:600}
+.proto{font-size:.8rem;text-align:center;color:var(--mut);margin-top:32px}
+@media(prefers-reduced-motion:no-preference){.view{animation:in .25s ease-out}@keyframes in{from{opacity:0}to{opacity:1}}}
+</style>
+</head>
+<body>
+<header><div class="bar">
+<div class="logo"><i></i>Ciudad Atenta</div>
+<nav id="nav"></nav>
+<span class="who" id="who"></span>
+</div></header>
+<main id="app"></main>
+
+<script>
+const CATS={"Alumbrado público":"💡","Corte de luz":"⚡","Agua / cloacas":"💧","Bache o vereda":"🚧","Basura y limpieza":"🗑️"};
+const ANON_TIPOS=["Corrupción o mal uso de fondos","Maltrato o abuso","Violencia o amenazas","Venta de sustancias","Otro"];
+const STATES=["Recibido","En revisión","En curso","Resuelto"];
+let db=[
+ {id:"RC-4821",kind:"reclamo",cat:"Alumbrado público",desc:"Tres luminarias apagadas en la cuadra.",dir:"Bv. Sarmiento 450",state:"En curso",user:"vecina@mail.com",date:"2026-09-24",log:["Recibido","En revisión","En curso"]},
+ {id:"RC-4830",kind:"reclamo",cat:"Agua / cloacas",desc:"Pérdida de agua en la esquina desde hace 3 días.",dir:"San Martín y Mitre",state:"Recibido",user:"juan@mail.com",date:"2026-09-27",log:["Recibido"]},
+ {id:"AN-7Q2K9",kind:"denuncia",cat:"Corrupción o mal uso de fondos",desc:"Obra parada con materiales que se retiran de noche.",dir:"Sector norte",state:"En revisión",user:null,date:"2026-09-26",log:["Recibido","En revisión"]}
+];
+let session=null, view="inicio", last=null;
+const $=s=>document.querySelector(s);
+const esc=t=>String(t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const today=()=>new Date().toISOString().slice(0,10);
+const rnd=n=>Array.from({length:n},()=>"ABCDEFGHJKMNPQRSTUVWXYZ23456789"[Math.random()*31|0]).join("");
+const cls=s=>"s-"+s.replace(" ","-");
+const steps=s=>{const i=STATES.indexOf(s);return `<div class="steps" aria-hidden="true">${STATES.map((_,k)=>`<span class="${k<=i?"on":""}"></span>`).join("")}</div>`};
+
+function nav(){
+ const items=[["inicio","Inicio"],["denuncia","Denuncia anónima"],["reclamo","Reportar problema"],["seguimiento","Seguimiento"]];
+ if(session) items.push(session.role==="admin"?["panel","Panel municipal"]:["mis","Mis reclamos"]);
+ $("#nav").innerHTML=items.map(([k,l])=>`<button data-v="${k}" ${view===k?'aria-current="true"':""}>${l}</button>`).join("");
+ $("#who").innerHTML=session?`${esc(session.email)} <button data-v="salir" style="padding:4px 8px;text-decoration:underline">Salir</button>`:`<button data-v="login" style="border:1px solid rgba(255,255,255,.5)">Ingresar</button>`;
+}
+document.addEventListener("click",e=>{const b=e.target.closest("[data-v]");if(!b)return;
+ if(b.dataset.v==="salir"){session=null;go("inicio")}else go(b.dataset.v)});
+function go(v){view=v;last=null;render();window.scrollTo(0,0)}
+
+const V={
+inicio:()=>`<section class="hero"><h1>Tu barrio funciona mejor<br>cuando lo contás.</h1>
+<p>Reportá un problema en tu calle o hacé una denuncia sin dejar tu nombre. Recibís un código para seguir cada caso.</p></section>
+<div class="grid">
+<button class="tile anon" data-v="denuncia"><h3>Denuncia anónima</h3><p>Sin cuenta, sin datos personales. Te damos un código de seguimiento.</p></button>
+<button class="tile" data-v="reclamo"><h3>Reportar un problema</h3><p>Luminaria apagada, corte de luz o agua, baches y más.</p></button>
+<button class="tile" data-v="seguimiento"><h3>Consultar un caso</h3><p>Ingresá tu código y mirá en qué estado está.</p></button></div>`,
+
+denuncia:()=>last?done(last,"Tu denuncia fue enviada"):`<h2>Denuncia anónima</h2>
+<div class="shield"><b>Tu identidad no se guarda.</b> Este formulario no pide nombre, email ni teléfono, y no registra tu cuenta aunque hayas iniciado sesión.</div>
+<form class="card" id="f-anon"><label for="t">Tipo de denuncia</label><select id="t">${ANON_TIPOS.map(t=>`<option>${t}</option>`).join("")}</select>
+<label for="d">¿Qué pasó?</label><textarea id="d" required minlength="15" placeholder="Contá qué, cuándo y dónde. Evitá incluir datos que te identifiquen."></textarea>
+<label for="l">Lugar (opcional)</label><input id="l" placeholder="Barrio, calle o institución">
+<p class="note">Prototipo: en la versión real se quitarían los metadatos de los archivos adjuntos y no se guardaría la IP.</p>
+<button class="btn">Enviar denuncia</button></form>`,
+
+reclamo:()=>{if(last)return done(last,"Reclamo registrado");
+ if(!session)return `<h2>Reportar un problema</h2><div class="card"><p>Para hacer un reclamo necesitás ingresar, así el municipio puede avisarte cuando se resuelva.</p><button class="btn" data-v="login">Ingresar o crear cuenta</button></div>`;
+ return `<h2>Reportar un problema</h2><form class="card" id="f-rec">
+<label for="c">Categoría</label><select id="c">${Object.entries(CATS).map(([k,v])=>`<option>${k}</option>`).join("")}</select>
+<label for="l">Dirección</label><input id="l" required placeholder="Calle y número, o esquina">
+<label for="d">Descripción</label><textarea id="d" required minlength="10" placeholder="Ej: la luminaria de la esquina lleva una semana apagada"></textarea>
+<button class="btn">Enviar reclamo</button></form>`},
+
+seguimiento:()=>`<h2>Seguimiento de un caso</h2><form class="card" id="f-seg"><label for="k">Código</label>
+<input id="k" placeholder="RC-4821 o AN-7Q2K9" autocomplete="off"><button class="btn">Buscar</button><div id="res"></div>
+<p class="note">Probá con RC-4821 o AN-7Q2K9.</p></form>`,
+
+login:()=>`<h2>Ingresar</h2><form class="card" id="f-login" style="max-width:420px">
+<label for="e">Email</label><input id="e" type="email" required placeholder="vos@mail.com">
+<label for="p">Contraseña</label><input id="p" type="password" required>
+<p class="note">Prototipo: cualquier contraseña sirve. Usá <b>admin@municipio.gob</b> para ver el panel municipal.</p>
+<button class="btn">Ingresar</button></form>`,
+
+mis:()=>{const m=db.filter(r=>r.user===session.email);return `<h2>Mis reclamos</h2>`+(m.length?m.map(card).join(""):`<div class="card"><p>Todavía no hiciste reclamos.</p><button class="btn" data-v="reclamo">Reportar un problema</button></div>`)},
+
+panel:()=>{const n=s=>db.filter(r=>r.state===s).length;
+ return `<h2>Panel municipal</h2><div class="stats"><div><b>${db.length}</b>Total</div><div><b>${n("Recibido")}</b>Nuevos</div><div><b>${n("En curso")+n("En revisión")}</b>En proceso</div><div><b>${n("Resuelto")}</b>Resueltos</div></div>
+<div class="card"><div class="filters"><select id="fk" aria-label="Filtrar por tipo"><option value="">Todos los tipos</option><option value="reclamo">Reclamos</option><option value="denuncia">Denuncias anónimas</option></select>
+<select id="fs" aria-label="Filtrar por estado"><option value="">Todos los estados</option>${STATES.map(s=>`<option>${s}</option>`).join("")}</select></div>
+<div class="tblwrap"><table><thead><tr><th>Código</th><th>Tipo</th><th>Detalle</th><th>Fecha</th><th>Estado</th></tr></thead><tbody id="rows"></tbody></table></div></div>`}
+};
+
+function card(r){return `<div class="card"><div class="row"><h3>${CATS[r.cat]||"🔒"} ${esc(r.cat)}</h3><span class="badge ${cls(r.state)}">${r.state}</span></div>
+<p>${esc(r.desc)}</p><p class="note">${esc(r.dir||"")} · ${r.id} · ${r.date}</p>${steps(r.state)}</div>`}
+function done(r,t){return `<div class="card"><h2>${t}</h2><p>Guardá este código para seguir el caso:</p><div class="code">${r.id}</div>
+${r.kind==="denuncia"?`<div class="shield">No podemos recuperar este código si lo perdés, porque no guardamos quién sos.</div>`:""}
+<div><button class="btn" data-v="seguimiento">Ir a seguimiento</button> <button class="btn alt" data-v="inicio">Volver al inicio</button></div></div>`}
+
+function rows(){const k=$("#fk").value,s=$("#fs").value;
+ const l=db.filter(r=>(!k||r.kind===k)&&(!s||r.state===s));
+ $("#rows").innerHTML=l.map(r=>`<tr><td><b>${r.id}</b></td><td>${r.kind==="denuncia"?"🔒 Anónima":esc(r.cat)}</td>
+ <td>${r.kind==="denuncia"?`<i>${esc(r.cat)}</i> – `:""}${esc(r.desc)}<div class="note">${esc(r.dir||"")}${r.user?" · "+esc(r.user):""}</div></td><td>${r.date}</td>
+ <td><select data-id="${r.id}" aria-label="Estado de ${r.id}">${[...STATES,"Rechazado"].map(x=>`<option ${x===r.state?"selected":""}>${x}</option>`).join("")}</select></td></tr>`).join("")||`<tr><td colspan="5">No hay casos con esos filtros.</td></tr>`}
+
+function bind(){
+ const on=(id,fn)=>{const f=$(id);if(f)f.addEventListener("submit",e=>{e.preventDefault();fn()})};
+ on("#f-anon",()=>{last={id:"AN-"+rnd(5),kind:"denuncia",cat:$("#t").value,desc:$("#d").value,dir:$("#l").value,state:"Recibido",user:null,date:today(),log:["Recibido"]};db.unshift(last);render()});
+ on("#f-rec",()=>{last={id:"RC-"+(4000+Math.random()*999|0),kind:"reclamo",cat:$("#c").value,desc:$("#d").value,dir:$("#l").value,state:"Recibido",user:session.email,date:today(),log:["Recibido"]};db.unshift(last);render()});
+ on("#f-seg",()=>{const r=db.find(x=>x.id===$("#k").value.trim().toUpperCase());
+  $("#res").innerHTML=r?`<hr style="border:0;border-top:1px solid var(--line);margin:18px 0">${card(r).replace('class="card"','')}`:`<p class="err">No encontramos ese código. Revisá que esté bien escrito.</p>`});
+ on("#f-login",()=>{const e=$("#e").value.toLowerCase();session={email:e,role:e.startsWith("admin")?"admin":"ciudadano"};go(session.role==="admin"?"panel":"inicio")});
+ if($("#rows")){rows();$("#fk").onchange=$("#fs").onchange=rows;
+  $("#rows").addEventListener("change",e=>{const r=db.find(x=>x.id===e.target.dataset.id);if(r){r.state=e.target.value;r.log.push(r.state);render()}})}
+}
+function render(){nav();$("#app").innerHTML=`<div class="view">${V[view]()}</div><p class="proto">Prototipo de demostración · los datos viven solo en esta sesión</p>`;bind()}
+render();
+</script>
+</body>
+</html>
